@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-environ = "*"
+django-extensions = "*"
+pillow = "*"
+psycopg2-binary = "*"
+
+[dev-packages]
+flake8 = "*"
+black = "*"
+pytest-django = "*"
+pytest-cov = "*"
+django-debug-toolbar = "*"
+psycopg2 = "*"
+coverage = "*"
+isort = "*"
+
+[requires]
+python_version = "3.12"
