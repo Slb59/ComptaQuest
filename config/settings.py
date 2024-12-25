@@ -35,7 +35,9 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ["comptaquest", "comptaquest.users"]
 
-TIERS_APPS = []
+TIERS_APPS = [
+    "webpack_boilerplate",
+]
 
 INSTALLED_APPS = TIERS_APPS + PROJECT_APPS + DJANGO_APPS
 
@@ -54,7 +56,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'comptaquest/users/templates')],
+        "DIRS": [
+            os.path.join(BASE_DIR, 'comptaquest/users/templates'),
+            os.path.join(BASE_DIR, 'comptaquest/templates'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -117,6 +122,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "frontend/build",
+]
+WEBPACK_LOADER = {
+    'MANIFEST_FILE': BASE_DIR / "frontend/build/manifest.json",
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

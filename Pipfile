@@ -19,6 +19,7 @@ django-debug-toolbar = "*"
 psycopg2 = "*"
 coverage = "*"
 isort = "*"
+python-webpack-boilerplate = "*"
 
 [requires]
 python_version = "3.12"
