@@ -9,7 +9,9 @@ class User(auth_models.AbstractUser):
         MEMBER = 'member', 'Member'
         SUPERMEMBER = 'supermember', 'Supermember'
 
-    trigram = models.CharField(max_length=10, blank=False)
+    first_name = None
+    last_name = None
+    trigram = models.CharField(max_length=5, blank=False)
     usertype = models.CharField(max_length=30, choices=UserTypes.choices,
     default = UserTypes.MEMBER, blank=True)
 

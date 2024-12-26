@@ -122,9 +122,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+# Configuration of directories for static files
 STATICFILES_DIRS = [
     BASE_DIR / "frontend/build",
 ]
+
+# Config of the webpack loader for python-webpack boilerplate
 WEBPACK_LOADER = {
     'MANIFEST_FILE': BASE_DIR / "frontend/build/manifest.json",
 }
