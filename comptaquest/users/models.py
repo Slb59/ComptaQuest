@@ -1,8 +1,12 @@
-from django.db import models
+from django.conf import settings
 from django.contrib.auth import models as auth_models
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from .managers import CustomUserManager
 
 
-class User(auth_models.AbstractUser):
+class CQUser(auth_models.AbstractUser):
 
     class UserTypes(models.TextChoices):
         ACCOUTANT = 'accountant', 'Accountant'
@@ -11,12 +15,19 @@ class User(auth_models.AbstractUser):
 
     first_name = None
     last_name = None
+    username = None
+    email = models.EmailField(_("email address"), unique=True)
     trigram = models.CharField(max_length=5, blank=False)
     usertype = models.CharField(max_length=30, choices=UserTypes.choices,
-    default = UserTypes.MEMBER, blank=True)
+        default = UserTypes.MEMBER, blank=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = [trigram]
+
+    objects = CustomUserManager()
 
     def __str__(self):
-        return f"{self.pseudo}"
+        return f"{self.trigram}"
     
     class Meta:
         verbose_name_plural = "users"
@@ -27,10 +38,10 @@ class User(auth_models.AbstractUser):
         ]
 
 class BaseUserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    profile_picture = models.ImageField(blank=True)
+    avatar = models.ImageField(blank=True, upload_to='profile_images')
 
     class Meta:
         abstract = True
@@ -39,15 +50,18 @@ class MemberProfile(BaseUserProfile):
     """ specific data to member """
     ...
 
-class Member(User):
+class MemberManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type=User.UserTypes.MEMBER)
+
+class Member(CQUser):
 
     class Meta:
         proxy = True
 
     @property
     def profile(self):
-        return self.MemberProfile
+        return self.memberprofile
+    
+    objects = MemberManager()
 
-class MemberManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filer(user_type=User.UserTypes.MEMBER)
