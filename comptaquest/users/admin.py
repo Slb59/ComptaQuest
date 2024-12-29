@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CQUserChangeForm, CQUserCreationForm
-from .models import CQUser
+from .models import CQUser, MemberProfile
 
 
 class CQUserAdmin(UserAdmin):
@@ -28,3 +28,8 @@ class CQUserAdmin(UserAdmin):
     ordering = ("trigram",)
 
 admin.site.register(CQUser, CQUserAdmin)
+
+@admin.register(MemberProfile)
+class MemberProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at', 'updated_at', 'avatar']
+    raw_id_fields = ['user']

@@ -20,7 +20,10 @@ from config import BASE_DIR, env
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env("DEBUG")
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -34,15 +37,18 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = ["comptaquest", "comptaquest.users"]
+PROJECT_APPS = [
+    "comptaquest", "comptaquest.users"]
 
 TIERS_APPS = [
     "webpack_boilerplate",
+    "django_extensions",
+    "debug_toolbar",
 ]
 
 INSTALLED_APPS = TIERS_APPS + PROJECT_APPS + DJANGO_APPS
 
-MIDDLEWARE = [
+STANDARD_MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -50,6 +56,21 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+TIERS_MIDDLEWARE = []
+
+DEBUG_MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
+]
+
+if DEBUG:
+    MIDDLEWARE = STANDARD_MIDDLEWARE + TIERS_MIDDLEWARE + DEBUG_MIDDLEWARE
+else:
+    MIDDLEWARE = STANDARD_MIDDLEWARE + TIERS_MIDDLEWARE
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = "config.urls"

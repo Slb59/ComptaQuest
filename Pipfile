@@ -21,6 +21,8 @@ psycopg2 = "*"
 coverage = "*"
 isort = "*"
 python-webpack-boilerplate = "*"
+werkzeug = "*"
+pyopenssl = "*"
 
 [requires]
 python_version = "3.12"

@@ -53,6 +53,10 @@ class TestModelMember(TestCase):
     def test_user_object_name_is_trigram(self):
         expected_object_name = f"{self.member_1.trigram}"
         self.assertEqual(expected_object_name, str(self.member_1))
+    
+    def test_user_profile_name_is_trigram(self):
+        expected = f"Profile of {self.member_1.trigram}"
+        self.assertEqual(expected, str(self.member_1.profile))
 
     def test_member_default_type_is_member(self):
         expected_object_name = "member"

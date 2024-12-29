@@ -3,7 +3,7 @@ from django.contrib.auth import models as auth_models
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .managers import CustomUserManager
+from .managers import CustomUserManager, MemberManager
 
 
 class CQUser(auth_models.AbstractUser):
@@ -45,14 +45,15 @@ class BaseUserProfile(models.Model):
 
     class Meta:
         abstract = True
+    
+    def __str__(self):
+        return f'Profile of {self.user.trigram}'
 
 class MemberProfile(BaseUserProfile):
     """ specific data to member """
     ...
 
-class MemberManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(user_type=User.UserTypes.MEMBER)
+
 
 class Member(CQUser):
 
