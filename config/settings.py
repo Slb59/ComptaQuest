@@ -37,13 +37,13 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = [
-    "comptaquest", "comptaquest.users"]
+PROJECT_APPS = ["comptaquest", "comptaquest.users"]
 
 TIERS_APPS = [
     "webpack_boilerplate",
     "django_extensions",
     "debug_toolbar",
+    "pattern_library",
 ]
 
 INSTALLED_APPS = TIERS_APPS + PROJECT_APPS + DJANGO_APPS
@@ -60,9 +60,7 @@ STANDARD_MIDDLEWARE = [
 
 TIERS_MIDDLEWARE = []
 
-DEBUG_MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware"
-]
+DEBUG_MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 if DEBUG:
     MIDDLEWARE = STANDARD_MIDDLEWARE + TIERS_MIDDLEWARE + DEBUG_MIDDLEWARE
@@ -79,8 +77,11 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, 'comptaquest/users/templates'),
-            os.path.join(BASE_DIR, 'comptaquest/templates'),
+            os.path.join(BASE_DIR, "comptaquest/users/templates"),
+            os.path.join(BASE_DIR, "comptaquest/templates"),
+            os.path.join(
+                BASE_DIR, "frontend/components/lib"
+            ),  # pour django pattern library
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -90,9 +91,14 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "builtins": ["pattern_library.loader_tags"],
         },
     },
 ]
+
+if DEBUG:
+    X_FRAME_OPTIONS = "SAMEORIGIN"
+
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -150,15 +156,33 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend/build",
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 # Config of the webpack loader for python-webpack boilerplate
 WEBPACK_LOADER = {
-    'MANIFEST_FILE': BASE_DIR / "frontend/build/manifest.json",
+    "MANIFEST_FILE": BASE_DIR / "frontend/build/manifest.json",
 }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+PATTERN_LIBRARY = {
+    # Groups of templates for the pattern library navigation. The keys
+    # are the group titles and the values are lists of template name prefixes that will
+    # be searched to populate the groups.
+    "SECTIONS": (
+        ("components", ["patterns/components"]),
+        ("pages", ["patterns/pages"]),
+    ),
+    # Configure which files to detect as templates.
+    "TEMPLATE_SUFFIX": ".html",
+    # Set which template components should be rendered inside of,
+    # so they may use page-level component dependencies like CSS.
+    "PATTERN_BASE_TEMPLATE_NAME": "patterns/base.html",
+    # Any template in BASE_TEMPLATE_NAMES or any template that extends a template in
+    # BASE_TEMPLATE_NAMES is a "page" and will be rendered as-is without being wrapped.
+    "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
+}
