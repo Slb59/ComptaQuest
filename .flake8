@@ -1,4 +1,4 @@
 [flake8]
-exclude = [migrations,settings.py,.venv,node_modules]
+exclude = migrations,settings.py,.venv,build,dist,node_modules
 max-line-length = 120
 ignore = E402,E501
