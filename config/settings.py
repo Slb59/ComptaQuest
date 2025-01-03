@@ -37,7 +37,11 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = ["comptaquest", "comptaquest.users"]
+PROJECT_APPS = [
+    "comptaquest",
+    "comptaquest.users",
+    "comptaquest.utils",
+]
 
 TIERS_APPS = [
     "webpack_boilerplate",
